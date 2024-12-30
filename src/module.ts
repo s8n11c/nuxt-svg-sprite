@@ -10,7 +10,7 @@ export interface ModuleOptions {
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'svg-sprite',
+    name: 'nuxt-svg-sprite',
     configKey: 'svgSprite',
   },
   // Default configuration options of the Nuxt module
@@ -21,19 +21,21 @@ export default defineNuxtModule<ModuleOptions>({
   setup(options, nuxt) {
     // check if the inputDir exists
     if (!fs.existsSync(path.resolve(nuxt.options.srcDir, options.inputDir))) {
-      console.log(`The input directory ${options.inputDir} does not exist`)
+      console.log(`[nuxt-svg-sprite] The input directory ${path.resolve(nuxt.options.srcDir, options.inputDir)} does not exist`)
       return
     }
 
     const inputDir = path.resolve(nuxt.options.srcDir, options.inputDir)
     const outputFile = path.resolve(nuxt.options.rootDir, options.outputFile)
 
+    console.log(`[nuxt-svg-sprite] Generating SVG sprite from ${inputDir} to ${outputFile}`)
+
     // Function to generate the sprite
     const generateSprite = () => {
       const files = fs.readdirSync(inputDir).filter(file => file.endsWith('.svg'))
       // if there is no svg files, do nothing
       if (files.length === 0) {
-        console.warn('No SVG files found in the input directory')
+        console.warn('[nuxt-svg-sprite] No SVG files found in the input directory')
         return
       }
 
